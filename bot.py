@@ -63,28 +63,68 @@ async def on_message(message):
 	# add to below if statement -> and str(message.author) in valid_users
 	# for restrictiong only some users to use the bot
 
-	bad_words = ["pucky", "punk", "drug"]	# filter bad words
-
+	bad_words = ["pucky", "punk", "drug", "fuck", "shit"]	# filter bad words
+	bad_word_count = 0
 	for word in bad_words:
 		if message.content.count(word) > 0:
-			print("A bad word was said")
-			#await message.channel.purge(limit=1)	# remove the message
-			await message.channel.send("Woow Calm down!, Take it easy buddy.")
+			bad_word_count = bad_word_count + 1
+	if(bad_word_count > 0):
+		print("A bad word was said")
+		#await message.channel.purge(limit=1)	# remove the message
+		await message.channel.send("Woow Calm down!, Take it easy buddy.\nYou said "+str(bad_word_count)+" bad words")
+		if(bad_word_count > 2):
+			await message.channel.send("You are using too many bad words, if u want to know what are the bad words use this command :")
+			await message.channel.send("`!rick bad_words`")
+
+	#print(message.content +" : "+ message.author.name)			# display who send what message
 
 	if(str(message.channel) in channels):
-		if(message.content.find("!rick") != -1):
+		if(message.content.startswith("!rick")):
+			text_out = message.content.split()[1]
+			#print(text_out)  						# display the command after !rick ___
+			if(text_out == "hello"):
+				await message.channel.send("Hi")
+			elif(text_out == "-users_cnt"):
+				await message.channel.send(f"""Number of Members {id.member_count}""")
+			elif(text_out == "bad_words"):
+				embed = discord.Embed(title="Bad Words that Morty is afraid of -", color=0x00ff00)
+				bad_words_list = '\n'.join(bad_words)
+				embed.add_field(name="bad_words",value=bad_words_list,inline=False)
+				await message.channel.send(content=None, embed=embed)
+
+			elif(text_out == "help"):
+				embed = discord.Embed(title="Help For RickBot", description="Some useful commands", inline=False)
+				embed.add_field(name="!rick", value="Default command")
+				embed.add_field(name="!rick -users_cnt", value="Display the users stat in server ", inline=False)
+				embed.add_field(name="!rick hello", value="replys Hi", inline=False)
+				await message.channel.send(content=None, embed=embed)
+			else:
+				await message.channel.send("humm... I see you dont know the command for me use this command to display them -")
+				await message.channel.send("`!rick help`")
+
+
+
+
+				# old method of serching in the messages
+			'''
 			if(message.content.find("hello") != -1):
 				await message.channel.send("Hi")
 			elif(message.content.find("-users_cnt") != -1):
 				await message.channel.send(f"""Number of Members {id.member_count}""")
+			elif(message.content.find("bad_words") != -1):
+				embed = discord.Embed(title="Bad Words that Morty is afraid of -", color=0x00ff00)
+				bad_words_list = '\n'.join(bad_words)
+				embed.add_field(value=bad_words_list,inline=False)
+
 			elif(message.content.find("help") != -1):
-				embed = discord.Embed(title="Help For RickBot", description="Some useful commands")
+				embed = discord.Embed(title="Help For RickBot", description="Some useful commands", inline=False)
 				embed.add_field(name="!rick", value="Default command")
-				embed.add_field(name="!rick -users_cnt", value="Display the users stat in server")
-				embed.add_field(name="!rick hello", value="replys Hi")
+				embed.add_field(name="!rick -users_cnt", value="Display the users stat in server ", inline=False)
+				embed.add_field(name="!rick hello", value="replys Hi", inline=False)
 				await message.channel.send(content=None, embed=embed)
 			else:
 				await message.channel.send("humm...")
+			'''
 	# else:
 	# 	print(f"""User:{message.author} tried to do command {message.content}, in  channel {message.channel}""")
 
