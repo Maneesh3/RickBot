@@ -3,8 +3,9 @@ import discord
 import os
 import time
 import asyncio
+import random
 
-token = os.getenv('discordRickBotToken')
+token = os.getenv('discordRickBotToken')		# Contact Morty for Tokens
 idFromEnvi = os.getenv('discordServerID')
 client = discord.Client()
 messages = joined = 0
@@ -63,6 +64,25 @@ async def on_message(message):
 	# add to below if statement -> and str(message.author) in valid_users
 	# for restrictiong only some users to use the bot
 
+	hi_words = ["hi", "hello", "how you doing", "good morning", "hola"]
+
+	hi_words_response = ["Ahh, Hello", 
+						"Ok HI", 
+						"Geez Hello there", 
+						"Morty, look now someone greeted me ", 
+						"Uh Moooorty wake up", 
+						"Who's that blowing the horn?",
+						"You know what's better than a greeting? Nothing!",
+						"Hello? Can anyone hear me?",
+						"Oh! I can't believe it. What a wonderful thing",
+						"Alrig-ugh-ight. You know what you're doing",
+						"Oh man! Oh hoo! I'm so happy about all this"
+						"Totes m'lotes dawg",
+						"Hoooo hoooooooo!",
+						"Huuugh that's good",
+						"You know Morty, it sometimes feels like they sometimes care"
+						]
+
 	bad_words = ["pucky", "punk", "drug", "fuck", "shit"]	# filter bad words
 	bad_word_count = 0
 	for word in bad_words:
@@ -81,9 +101,10 @@ async def on_message(message):
 	if(str(message.channel) in channels):
 		if(message.content.startswith("!rick")):
 			text_out = message.content.split()[1]
+			text_out_greet = ' '.join(message.content.split()[1:])		# get the greeting completely
 			#print(text_out)  						# display the command after !rick ___
-			if(text_out == "hello"):
-				await message.channel.send("Hi")
+			if(text_out_greet.lower() in hi_words):
+				await message.channel.send(f'{random.choice(hi_words_response)}')
 			elif(text_out == "-users_cnt"):
 				await message.channel.send(f"""Number of Members {id.member_count}""")
 			elif(text_out == "bad_words"):
@@ -99,7 +120,7 @@ async def on_message(message):
 				embed.add_field(name="!rick hello", value="replys Hi", inline=False)
 				await message.channel.send(content=None, embed=embed)
 			else:
-				await message.channel.send("humm... I see you dont know the command for me use this command to display them -")
+				await message.channel.send("humm... I see you dont know the command for me, use this command to display them -")
 				await message.channel.send("`!rick help`")
 
 
