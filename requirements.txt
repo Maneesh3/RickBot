@@ -1,0 +1,8 @@
+python 3.6
+------------ discord - Library in Python
+python -m pip install -U discord.py
+python -m pip install -U discord.py[voice]
+python -m pip install -U youtube_dl
+
+asyncio - Library in Python
+ffmpeg
